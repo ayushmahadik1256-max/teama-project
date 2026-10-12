@@ -7,6 +7,7 @@ import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;  // <-- ADD THIS IMPORT
 import java.util.UUID;
 
 @RestController
@@ -18,26 +19,27 @@ public class InternalSchedulerController {
     public InternalSchedulerController(SchedulerService schedulerService) {
         this.schedulerService = schedulerService;
     }
+
     @PostMapping("/scheduler/run")
-     public ResponseEntity<ApiResponse<Map<String, Object>>> runScheduler(
-    @RequestBody(required = false) Map<String, Object> request,
-    @RequestHeader(value = "X-Correlation-ID", required = false) String correlationId
-      ) {
-    String corrId = (correlationId != null) ? correlationId : UUID.randomUUID().toString();
-    String decisionId = "dec-" + UUID.randomUUID().toString().substring(0, 8);
-    String leaseId = "lease-" + UUID.randomUUID().toString().substring(0, 8);
+    public ResponseEntity<ApiResponse<Map<String, Object>>> runScheduler(
+        @RequestBody(required = false) Map<String, Object> request,
+        @RequestHeader(value = "X-Correlation-ID", required = false) String correlationId
+    ) {
+        String corrId = (correlationId != null) ? correlationId : UUID.randomUUID().toString();
+        String decisionId = "dec-" + UUID.randomUUID().toString().substring(0, 8);
+        String leaseId = "lease-" + UUID.randomUUID().toString().substring(0, 8);
 
-    Map<String, Object> responseData = Map.of(
-        "decision_id", decisionId,
-        "decisionId", decisionId,
-        "lease_id", leaseId,
-        "leaseId", leaseId,
-        "state", "GRANTED",
-        "status", "GRANTED"
-    );
+        Map<String, Object> responseData = Map.of(
+            "decision_id", decisionId,
+            "decisionId", decisionId,
+            "lease_id", leaseId,
+            "leaseId", leaseId,
+            "state", "GRANTED",
+            "status", "GRANTED"
+        );
 
-    return ResponseEntity.ok(ApiResponse.success(responseData, corrId));
-   }
+        return ResponseEntity.ok(ApiResponse.success(responseData, corrId));
+    }
 
     @PostMapping("/locks/acquire")
     public ResponseEntity<ApiResponse<LockAcquireResponse>> acquireLock(
