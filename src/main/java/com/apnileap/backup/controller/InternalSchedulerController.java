@@ -25,6 +25,7 @@ public class InternalSchedulerController {
         @RequestBody(required = false) Map<String, Object> request,
         @RequestHeader(value = "X-Correlation-ID", required = false) String correlationId
     ) {
+        System.out.println(">>> [TEAM A] Received scheduling request from Team C: " + request + " | Correlation: " + correlationId);
         String corrId = (correlationId != null) ? correlationId : UUID.randomUUID().toString();
         String decisionId = "dec-" + UUID.randomUUID().toString().substring(0, 8);
         String leaseId = "lease-" + UUID.randomUUID().toString().substring(0, 8);
